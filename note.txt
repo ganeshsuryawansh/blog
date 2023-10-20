@@ -1,0 +1,1876 @@
+
+
+1.in index.php--> blog nave --> in desktop view add css class--> text-center and remove class--> lg:ml-24 .
+
+--> in blog nav desktop view replace these button  -->
+
+<button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-gray-700   focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">See All
+    <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 9l-7 7-7-7"></path>
+    </svg>
+</button>
+
+to new button 
+
+<button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="inline-flex mx-2 focus:text-purple-700 active:text-purple-700 focus:outline-none" type="button">
+    See All
+</button>
+
+2.in index.php --> right side bar ---> add width = w-96 and remove the -->lg:w-56.
+3.in index.php--->left side bar remove---> width = w-72 and remove the -->lg:w-56.
+
+
+4.in data.php in mobile view cards replace these tag 
+<h5 class=" text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><?php echo (substr($shorttitle,0,30)); ?></h5>
+
+to new tag in all cards in mobile views in data.php .
+<h5 class="text-2xl text-gray-900 dark:text-black"><?php echo (substr($shorttitle,0,60)); ?></h5>
+
+5.add focus:outline-none class to all butoons in index.php, data.php, functions.php.
+
+********************************************************3/5/2023***********************************************************************************************************
+1. Clicking on copy link button exact link not copyied.
+
+
+2. images height in mobile device are change .
+3. replace navigator > icon to svg icon.
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+</svg>
+
+4. add margine my-8 px-4 in the all desktop view cards in data.php or functions.php .
+
+5. add new attribute in the image tag in data.php or functions.php in desktop view cards.
+---> style="width: 33.33% !important; height: 200px !important;"
+
+6. increase char count in data.php or functions.php in desktop view .
+$name = $result['post_content'];
+$small = substr($name, 0, 100);
+
+to
+
+$name = $result['post_content'];
+$small = substr($name, 0, 150)."...";
+
+7. adding [ Montserrat font-medium ] class in data.php or index.php or functions.php
+--> all divs and p and h1 tags.
+
+8.blog nav desktop view add class to [ max-[1100px]:hidden ].
+
+****************************************************************4/5/2023**********************************************************************************
+{1.} increase char count in [data.php] or [functions.php] in desktop view .
+$name = $result['post_content'];
+$small = substr($name, 0, 100);
+
+to
+
+$name = $result['post_content'];
+$small = substr($name, 0, 150)."...";
+
+
+{3.} copy desktop view card from [data.php] and replace these card to [functions.php] inside these functions.
+->show_cat_blogposts()
+->show_popular_blogposts()
+->show_saved_posts()
+
+{4.} save unsave post button in all cards in [data.php] and [functions.php] 
+->inside onclick button savepost(this.value )
+->to replace --> savepost(this.value ,'<?php Check_post_saved_or_not($result['post_id'], $userid); ?>'); 
+
+-> in ajax.php 
+-> replace savepost() function to 
+
+function savepost(id,color){
+    //console.log(color+"  "+id);
+
+    if (color === "white") {
+        // Call a function to save the post.
+        saveBlogPost(id);
+    } else {
+        // Call a function to unsave the post
+        unsavePost(id);
+    }
+}
+
+these function.
+
+--> and add two more functions.
+
+//function to save the post.
+function saveBlogPost(id) {
+    console.log("Post saved");
+    
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "data.php?saveid="+id, true);
+    xmlhttp.send();
+    //alert("function called"+id);
+    let notify = `
+    <div id="toast-success" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <span class="sr-only">Check icon</span>
+        </div>
+        <div class="ml-3 text-sm font-normal"><b>Posts Saved</b></b><button onclick="ShowSaved(); catenavigation('Saved')" class="mx-2 text-purple-700"><b>See All Saved<b/></button>
+        </div>
+    </div>`;
+    
+    const notification = document.createElement('div');
+    notification.innerHTML = notify;
+
+    document.getElementById('notification').appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Function to unsave the post
+function unsavePost(id) {
+    console.log("Post unsaved");
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "data.php?unsaveid="+id, true);
+    xmlhttp.send();
+
+    let notify = `
+    <div id="toast-red" class="flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800" role="alert">
+        <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-red-500 bg-red-100 rounded-lg dark:bg-red-800 dark:text-red-200">
+            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+            <span class="sr-only">Check icon</span>
+        </div>
+        <div class="ml-3 text-sm font-normal"><b>Posts Unsaved</b></b><button onclick="ShowSaved(); catenavigation('Saved')" class="mx-2 text-purple-700"><b>See All Saved<b/></button>
+        </div>
+    </div>`;
+    
+    const notification = document.createElement('div');
+    notification.innerHTML = notify;
+
+    document.getElementById('notification').appendChild(notification);
+
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+
+in data.php add code block
+-> //unsave post with user the Id.
+if ($unsave_post_id = $_GET['unsaveid'] ) {
+
+    global $userid; // user id comes from user login session. 
+    global $conn;
+    $token = $unsave_post_id."_".$userid;
+
+    $data = $conn->prepare(" DELETE FROM `blog_posts_saved` WHERE `token`= '$token'");
+    $data->execute();
+}
+
+{5.} related posts are not show in mobile and tab view.
+{6.} popular posts are not shown in desktop view.
+{7.} comment out the catenavigation() function part.
+{8.} remove hidden lg:block property in right sidebar.
+{9.} add padding lg:px-20 to main blog container.
+
+
+**********************************************5/5/2023*************************************************************************
+ 0.in {functions.php} function showblogpost() 
+-->image tag css-> replace these->{ class="lg:h-96 xl:w-3/4 lg:w-3/4 h-96" } 
+-->add parent div to image tag and its css-> { class="flex flex-row justify-center" }
+
+ 1. in {blogs.php} use substr() function to remove the extra chars from navigator post title .
+
+ 2. add all cards desktop and mobile hover:bg-gray-200 property in {data.php} and {functions.php} .
+ 
+ 3. in catgory wise posts dates add read 5 min at {data.php }.
+
+4. right side boxes heading add {Montserrat} property in {blogs.php} and add {my-3} for only {disover more} card.
+
+ 5. in navigator post name link add {Montserrat} fornt in {blogs.php}
+
+ 6. in {functions.php } showblogpost() function add {Montserrat} class to all text .
+ --> add {Montserrat} class to all paragraphs or texts.
+ --> add class to like button class="mx-2 pb-3"
+
+ 7.in {data.php} related in {bydefaultrelated} posts add {Montserrat} class to all text .
+ 
+ 8.add main container mx-4.
+
+*******************************************8/5/2023******************************************************************************************
+1.image height issue in data.php all desktop view cards.
+2.not show share dropdown in all posts.
+ -->show dropdown function get post id.
+3.in function dropdown_for_share() add parameter  dropdown_for_share($post_id) function.
+
+and all function called add postid parameter in {data.php} and {functions.php} and {index.php}
+
+4. in {data.php} and {function.php} desktop views 
+add two lines after $shortdate
+
+$timestamp = strtotime($shortdate);
+$formattedDate = date("M j", $timestamp);
+
+and print replace this 
+---><p><?php echo ($formattedDate); ?> . &nbsp; 5 min read</p>
+
+********************************************************9/5/2023***************************************************************************************
+1. in {data.php} show {bydefaultrelated} and {showmoreposts} related post mobile view {likes} show in dounble.
+
+2. in {functions.php} function showlikes() replace the loop.
+
+foreach($datas as $data){
+    if(!$data['likes']){
+        echo("0 likes");
+    }
+    else{
+        echo($data['likes']." likes");
+    }
+}
+
+3. in {functions.php} function saved_post() add after $updateddate.
+--> $timestamp = strtotime($updateddate);
+    $formattedDate = date("M j", $timestamp);
+
+4. in {functions.php} function related_post() add after $updateddate
+--> $timestamp = strtotime($updateddate);
+    $formattedDate = date("M j", $timestamp);
+
+5. in {functions.php} function showblogpost() add after $updateddate
+--> $timestamp = strtotime($updateddate);
+    $formattedDate = date("M j", $timestamp);
+
+6. in {functions.php} function dropdown_for_share() remove classes from main div{ lg:mr-5 sm:mr-5 }
+
+7. in {functions.php} function show_popular_posts() remove "likes" from --> <p class="text-gray-500"><?php echo(show_likes($poid)." likes");?></p>
+
+
+********************************************************11/5/2023*****************************************************************
+1. replace function dropdown_for_share()
+
+function dropdown_for_share($postid){
+    ?>
+        <button class="lg:mr-5 sm:mr-5 focus:outline-none" id="dropdownButton<?php echo($postid); ?>" data-dropdown-toggle="dropdown<?php echo($postid); ?>" 
+            type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path
+                    d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+            </svg>
+        </button>
+        <div id="dropdown<?php echo($postid); ?>" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            <ul class="py-2 text-center text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton<?php echo($postid); ?>">
+                <li>
+                    <a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Share<?php echo($postid); ?></a>
+                </li>
+                <li>
+                    <a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+                </li>
+            </ul>
+        </div>
+<?php
+}
+
+*********************************************************12/5/2023*****************************************************************************************
+1. in {data.php} show {bydefaultrelated} and {showmoreposts} ---> mobile view goto line --->
+---> <p class="visible lg:invisible sm:invisible Montserrat" ><?php echo (show_likes($field['post_id'])." likes ."); ?>&nbsp; 5 min read</p>
+
+2. in {functions.php} function show_popular_blogposts() replace the html part after 
+--> <p><?php echo ($formattedDate); ?>&nbsp; 5 min read</p>
+
+<p> tag 
+--->
+<div class="flex flex-row">
+    <div>
+        <button class="mr-5 my-3 focus:outline-none" id="saveicon" onclick="savepost(this.value ,'<?php Check_post_saved_or_not($result['post_id'], $userid); ?>'); replaceIcon()"
+            value="<?php echo($result['post_id']); ?>">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                fill="<?php Check_post_saved_or_not($result['post_id'], $userid);?>" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="orange" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+            </svg>
+        </button>
+    </div>
+    <!--dropdown for share and report--->
+    <div class="flex flex-col mr-5 mt-3">
+        <button class="focus:outline-none" onclick="drop_desktop('<?php echo($result['post_id']);?>')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+            <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+        </svg></button>
+        <div id="<?php echo($result['post_id']);?>" class="flex flex-col">
+        </div>
+    </div>
+</div>
+
+3.in {data.php} or {functions.php} in ---> Desktop view All cards comment out the function --> <?php dropdown_for_share($result['post_id']); ?>
+and paste here to -->
+
+<div class="flex flex-col mr-5">
+    <button class="focus:outline-none" onclick="drop_desktop('<?php echo($result['post_id']);?>')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+        <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+        </svg>
+    </button>
+    <div id="<?php echo($result['post_id']);?>" class="flex flex-col">
+    </div>
+</div>
+
+
+4. in {data.php} or {functions.php} in ---> mobile view  All cards comment out the function --> <?php dropdown_for_share($result['post_id']); ?>
+and paste here to -->
+
+<div class="flex flex-col">
+    <button class="focus:outline-none" onclick="drop_mobile('<?php echo($result['post_id'].'5');?>')"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+        <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+        </svg>
+    </button>
+    <div id="<?php echo($result['post_id'].'5');?>" class="flex flex-col">
+    </div>
+</div>
+
+
+5. in ajax.js  paste the new functions --->
+
+let alternatingBoolean = false;
+
+//show drpodown in desktop cards.
+function drop_desktop(b) {
+    //console.log("inside func , id is: "+b)
+    alternatingBoolean = !alternatingBoolean;
+
+    let elem = document.getElementById(b);
+    //return alternatingBoolean;
+    if(elem){
+        
+        
+        if(alternatingBoolean){
+            
+            var html=`
+            <p class="bg-white"><a href="#">Share</a></p>
+            <p class="bg-white"><a href="#">Report</a></p>`;
+
+            elem.innerHTML=html;
+        }
+        else{
+            elem.innerHTML="";
+        }
+    }
+    else{
+    }
+}
+
+//show dropdown in mobile phone
+function drop_mobile(id){
+    alternatingBoolean = !alternatingBoolean;
+
+    let elem = document.getElementById(id);
+    //return alternatingBoolean;
+    console.log(alternatingBoolean);
+
+    if(elem){
+        if(alternatingBoolean){
+            
+            var html=`
+            <p class="bg-white"><a href="#">Share</a></p>
+            <p class="bg-white"><a href="#">Report</a></p>`;
+
+            elem.innerHTML=html;
+        }
+        else{
+            elem.innerHTML="";
+        }
+    }
+    else{
+        //console.log("element not get");
+    }
+}
+
+
+
+6. in {functions.php} function showblogpost() ---> comment out the  <?php dropdown_for_share($postid); ?> and paste to 
+--> top of the paragraph and content
+<div class="flex flex-col">
+    <button class="focus:outline-none" onclick="drop_desktop('<?php echo($id);?>')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+            <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+        </svg>
+    </button>
+    <div id="<?php echo($id);?>" class="flex flex-col">
+    </div>
+</div>
+
+--->bottom of the paragraphs
+
+---->
+<div class="flex flex-col">
+    <button class="focus:outline-none" onclick="drop_desktop('<?php echo($id.'2');?>')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+            <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+        </svg>
+    </button>
+    <div id="<?php echo($id.'2');?>" class="flex flex-col">
+    </div>
+</div>
+
+7. in {data.php} all desktop view cards increase the --> $small = substr($name, 0, 100); 
+$small = substr($name, 0, 300);
+
+8. in blogs.php comment <!--blog cards--> remove class -> { py-10 } .
+
+
+************************************************************15/5/2023*********************************************************************************************
+1. in { blog_header.php } add this bootstrap link
+-->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+2. in { blog_footer.php } add this link at end of file .
+-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+
+3. in { functions.php } ---> function dropdown_for_share($postid) replace this html 
+--->
+
+<div class="dropdown">
+    <button class="" type="button" data-bs-toggle="dropdown" aria-expanded="">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+        <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+    </svg>
+    </button>
+    <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Share</a></li>
+    <li><a class="dropdown-item" href="#">Report</a></li>
+    </ul>
+</div>
+
+4. in {data.php} all desktop view cards increase post description count --> $small = substr($name, 0, 100); 
+--->
+$small = substr($name, 0, 300);
+
+5. in { blogs.php } comment <!--blog cards-->
+--->
+remove class -> { py-10 } .
+---------------------------------------------------------------------------------------
+
+6. in { functions.php } ---> function showblogpost() ---> replace  
+-->
+
+<a href="index.php?poid=<?php echo($postid);?>&like=1">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+    </svg>
+</a>
+
+to this --->
+
+<button class="focus:outline-none mb-10" onclick="newlike('<?php echo($postid);?>')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+    </svg>
+</button>
+
+7. and { functions.php } ---> function showblogpost() --> comment out the function ----> like($postid , $userid);
+
+8.in { data.php } add this
+--->
+
+$newlikepostid = $_GET['newlike'];
+
+if(isset($newlikepostid)){
+
+    echo("inside if");
+    $token = $newlikepostid."_".$userid;
+
+    if(Check_user_likes_or_not($token)){    //check user already like or not
+        echo("inside Check_user_likes_or_not  if");
+
+        $query = "SELECT * FROM `blog_posts` WHERE `post_id` = '$newlikepostid'"; // fetch post preveous likes before new user likes.
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+        
+        if($results){
+            //echo("first query execute.");
+        }
+        foreach ($results as $result) {
+            //echo"inside foreach";
+            $dblikes = $result['likes'];
+            //update new user likes
+            $qr = "UPDATE `blog_posts` SET `likes` = '$dblikes'+1  WHERE `post_id` = '$newlikepostid' ";
+            $data = $conn->prepare($qr);
+            $data->execute();
+            
+            //insert new user data into blog_posts_user_likes table.
+            $userdata = $conn->prepare("INSERT INTO `blog_posts_user_likes` (`postid`, `userid`,`token`, `likes`) VALUES (?, ?, ?, ?) ");
+            $userdata->execute(array($newlikepostid, $userid, $token, "liked"));
+        } 
+    }
+    else{
+        //echo("     !You Liked");
+    }
+
+    //echo("like done");
+}
+
+9. in { ajax.js } add this function 
+-->
+
+function newlike(id){
+
+    var response ="";
+    $.ajax({
+        type: "GET",
+        url: "data.php?newlike="+id,
+        async: false,
+        success: function (text) {
+            response = text
+        }
+    })
+}
+
+10. in { functions.php }---> function showblogpost() add class to parent div of function dropdown_for_share();
+--->css class { flex flex-row }.
+
+11. in {functions.php}  functions --->{ show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() } all desktop view cards increase post description count --> $small = substr($name, 0, 100); 
+--->
+$small = substr($name, 0, 300);
+
+*******************************************************************16/5/2023*************************************************************************
+1. in { data.php } inside this { if($_GET['saved']) } add 
+--->
+if(isset($userid)){
+    //all code
+}
+else{
+    echo("Login or Signup Please...");
+}
+
+
+
+2.in {functions.php}  functions --->{ show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() } and { data.php } all desktop view cards increase post description count --> $small = substr($name, 0, 300); 
+--->
+$small = substr($name, 0, 150);
+
+
+
+3. in { blogs.php } Products you Need to Organise ----> Chnage to 
+--->  Related products .
+
+
+
+4. in { functions.php } functions ---> function showblogpost();
+add class { pt-5} to this div
+---> <div class=" grid grid-cols-2">
+
+
+
+5.in { data.php }  and { functions.php } functions ---> { show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() }
+all desktop view cards remove this class { dark:text-white } to that tag 
+---> <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white Montserrat"><?php echo (substr($shorttitle,0,50)); ?></h5>
+
+
+
+6. in { ajax.js } functions ---> unsavePost() and saveBlogPost() replace the button 
+--> <button onclick="ShowSaved(); catenavigation('Saved')" class="mx-2 text-purple-700"><b>See All Saved<b/></button>
+to
+
+---><a href="blogs?saved=1" class="mx-2 text-purple-700"><b>See All Saved<b/></a>
+
+
+
+7. in ajax.js remove the function replaceIcon();
+
+
+
+8. in { blogs.php } paste this 
+---> <input class="inputField h-0 hidden" style="Display:none" type="text" id="userid" value="<?php echo($userid);?>"/>
+
+
+
+9. in { ajax.js } paste this 
+---->
+function user_not_found_alert(){
+    var user_session = document.getElementById("userid").value;
+    //console.log("user id is: "+user_session)
+
+
+    if(user_session==""){
+        //console.log("user not found")
+        alert("login Please");
+    }
+}
+
+
+
+10. in { ajax.js } function { ShowSaved(),newlike(), } add inside --> this function user_not_found_alert();
+
+
+
+11. in { ajax.js } function { saveBlogPost(), unsavePost()} replace this 
+--->
+const notification = document.createElement('div');
+notification.innerHTML = notify;
+document.getElementById('notification').appendChild(notification);
+setTimeout(() => {
+    notification.remove();
+}, 3000);
+
+to ---->
+var user_session = document.getElementById("userid").value;
+console.log("user id is: "+user_session)
+
+
+if(user_session==""){
+    console.log("user not found")
+    alert("login Please");
+}else{
+        const notification = document.createElement('div');
+    notification.innerHTML = notify;
+    document.getElementById('notification').appendChild(notification);
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+
+12. in { data.php } ---> this if if(isset($newlikepostid)){
+--at last add function show_likes($newlikepostid);
+
+13. in  { ajax.js } function newlike add last
+--->     document.getElementById("showlike").innerHTML = response;
+
+14 . in { functions.php } --> function showblogpost() ---> add id { showlike } to 
+
+---->
+    <div class="" id="showlike">
+        <?php   show_likes($postid);
+                //like($postid , $userid);
+        ?>
+    </div>
+ 
+*******************************************************17/5/2023*********************************************************************************
+1. in ajax.js add new function
+---->
+function showlike(id){
+    console.log("inside showlike...");
+    $.ajax({
+        type: "GET",
+        url: "data.php?showlike="+id,
+        async: false,
+        success: function (text) {
+            response = text
+            document.getElementById("showlike").innerHTML = text;
+        }
+    })
+}
+
+2. in data.php add new 
+--->
+$postid = $_GET['showlike'];
+if(isset($postid)){
+    show_likes($postid);
+}
+
+
+3. in functions.php in button add inside onclick ---> js function { showlike('<?php echo($postid);?>') }
+--> <!--like button--->
+
+<button class="focus:outline-none mb-10" onclick="newlike('<?php echo($postid);?>'); showlike('<?php echo($postid);?>')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+    </svg>
+</button>
+
+4. in data.php all desktop view cards remove class----->{ hover:bg-gray-200 }
+
+5. in functions.php ----> function dropdownCats() , showCate() ---> replace this class { text-purple-800 }
+-----> add thos class { focus:text-purple-800 }
+
+6. in blogs.php --> in <!--main content middle bar---> buttons 
+--->
+<button onclick="latest(); catenavigation('Latest') " class="focus:outline-none mx-2 focus:text-purple-700 active:text-purple-700">Latest</button>
+<button onclick="Popular(); catenavigation('Popular')" class="focus:outline-none mx-2 focus:text-purple-700 active:text-purple-700">Popular</button>
+<button onclick="ShowSaved();catenavigation('Saved')" class="focus:outline-none mx-2 focus:text-purple-700 active:text-purple-700">Saved</button>
+
+remove class { text-purple-800 } and add { focus:text-purple-800 }
+
+7. in blogs.php --> <!--main content middle bar---> add class { mb-5 }
+
+----------------------------------------------------------------
+
+4. in ajax.js ---> replace function user_not_found_alert()
+to ----->
+
+function user_not_found_alert(){
+    var user_session = document.getElementById("userid").value;
+    //console.log("user id is: "+user_session)
+
+
+    if(user_session==""){
+    
+        document.getElementById("likebtn").setAttribute("data-bs-toggle","modal");
+        document.getElementById("likebtn").setAttribute("data-bs-target","#exampleModal");
+    } 
+}
+
+5. in functions.php function showblogpost() add id to like button { id="likebtn" }
+
+--->
+<button id="likebtn" class="focus:outline-none mb-10" onclick="newlike('<?php echo($postid);?>'); showlike('<?php echo($postid);?>')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
+    </svg>
+</button>
+
+********************************************************************************18/05/2023*******************************************************************************************
+1. in blogs.php <!--main content middle bar---> add class { shadow-lg Montserrat font-medium bg-[#ffffff] } and remove class { bg-white }.
+
+2. in blogs.php add class in inside { <!---right sidebar---> }  ---> add after that comment replace these class { shadow-lg Montserrat font-medium bg-[#ffffff] }
+ to { bg-white } in  { <!---popular posts in right sidebar-----> , <!-----categories in right sidebar--->, <!--saved posts in right sidebar--->, <!---Related posts show after one blog post can open-->}
+
+3. in blogs.php in id { mydata } add class { px-4 }
+
+
+4. in blogs.php  <!--main content middle bar---> add class { px-4 }
+
+5. in blogs.php inside { <!---right sidebar---> div } 
+replace class { py-1, my-2, lg:my-2  } to { pt-6}
+
+---><h5 class="lg:py-1 ml-3" ><b>Popular Posts </b></h5>
+---><h5 class="my-2 ml-3"><b>Discover More</b></h5>
+---><h5 class="lg:my-2 ml-3"><b>Saved Posts</b></h5>
+---><h5 class="ml-3"><b>Related Posts</b></h5>
+
+6. in data.php all desktop view cards add this svg 
+-->
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+</svg>
+
+inside starting of p tag and add class to p tag { flex flex-row }-->
+<p><?php echo ($formattedDate); ?>.&nbsp; 5 min read</p>
+
+7. blog post in mobile view share and report dropdown are not working.
+
+8. in blogs.php inside { <!---right sidebar---> div } 
+at
+--->See more posts
+--->See All Categories
+--->See All Saved
+
+add class { my-3 }
+
+
+
+9. in functions.php function showblogpost() --> like button add class { mr-2 pt-1 }
+
+10.in functions.php function showblogpost() -->  <!--blog footer icons likes --> add class {  pt-4 }
+
+*******************************************************19/5/2023*************************************************************
+1.create new file register.php and paste code 
+--->
+
+<?php
+session_start();
+include('include/dbconnect.php');
+
+//error_reporting(E_ALL ^ E_NOTICE);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST["name"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $data = $conn->prepare("INSERT INTO `blog_users` (`name`, `email`, `password`) VALUES (?, ?, ?)");
+    $data->execute(array($name, $email, $password));
+
+    if(isset($data)){
+        echo('Successfully registered!');
+        header("Location: login.php");
+    }
+}
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Register Now</h1>
+        <form action="register.php" method="POST">
+            <div class="form-group col-md-6">
+                <label for="Username">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" name="name" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Username">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" name="email" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Username">Set password</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" name="password" required>
+                </div>
+            </div>
+            <button type="submit" name="submit" class="btn btn-primary my-2">Submit</button>
+            <b>Already registered <a href="login.php">Login</a>Here !</b>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+
+
+
+2. create new file login.php and paste code to 
+--->
+<?php
+session_start();
+include('include/dbconnect.php');
+
+error_reporting(E_ALL ^ E_NOTICE);
+
+$login = false;
+
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $query = "SELECT * FROM blog_users WHERE email = '$email'";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $results = $stmt->fetchAll();
+    if (!$results) {
+        echo ("No user Found...");
+    }
+    /*
+    $data = $conn->prepare("SELECT * FROM `blog_users` WHERE `email` = gs@gmail.com");
+    $data->execute();
+    $results = $data->fetchAll();
+
+    if(!isset($result)){
+        echo"email.found";
+    }*/
+
+    foreach ($results as $result) {
+        if($result['password'] ==$password){
+            $login = true;
+            $_SESSION['userid'] =  $email;
+            echo('Login Successfully !'. $_SESSION['userid']);
+            header("Location: index.php");
+        }
+        else{
+            echo"Wrong Password";
+        }
+    }
+}
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Login Now</h1>
+        <form action="login.php" method="POST">
+            
+            <div class="form-group col-md-6">
+                <label for="Username">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" name="email" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="Username">Password</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="" name="password" required>
+                </div>
+            </div>
+            <button type="submit" name="submit" class="btn btn-success my-2">Login</button>
+            <b>You don't have an Account <a href="register.php">Register</a>Here !</b>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+
+
+
+3. create new file logout.php and paste code
+--->
+<?php
+session_start();
+
+session_unset();
+
+session_destroy();
+
+header("location: index.php");
+?>
+
+
+
+
+4.in blogs.php add this
+--->
+$userid = $_SESSION['userid'];
+
+//logout button
+if(isset($_SESSION['userid'])){
+
+    ?>
+    <a href="logout.php" >Logout</a>
+    <?php
+}
+else{
+    ?>
+    <a href="login.php" >login</a>
+    <?php
+}
+
+
+
+5. in ajax.js replace function user_not_found_alert()
+to--->
+
+function user_not_found_alert() {
+  var user_session = document.getElementById("userid").value;
+
+  if(user_session == ''){
+    window.location.href = "login.php";
+  }
+}
+
+
+
+6. in ajax.js in call function { user_not_found_alert() } inside this functions at starting of functions { newlike(), savepost(), ShowSaved() }
+
+7. make sure this input tag present in blogs.php
+---->
+<input class="inputField h-0 hidden" style="Display:none" type="text" id="userid" value="<?php echo($_SESSION['userid'])?>" />
+
+
+
+8. remove the login and register modal buttons from blog website
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+start working with satish on that to  -->
+
+
+
+
+
+
+9. in functions.php functions { show_popular_blogposts(), show_cat_blogposts(), show_saved_posts()} all desktop view cards add this svg 
+-->
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mx-2 mt-1">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+</svg>
+
+inside starting of p tag and add class to p tag { flex flex-row } -->
+<p><?php echo ($formattedDate); ?>.&nbsp; 5 min read</p>
+
+
+
+10. in data.php all desktop view cards this svg  add class { mx-2 mt-1 }
+--->
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+</svg>
+
+
+
+11. in functions.php functions { showblogpost(), show_popular_blogposts(), show_cat_blogposts(), show_saved_posts()} in all desktop view cards add class { px-5 }.
+
+
+
+12. in data.php all desktop view cards remove the class { px-2 }
+
+
+13. in blogs.php --> right side bar add id { rightsidebar }
+
+14. in ajax.php in function ShowSaved() add this 
+--->
+    var hide = document.getElementById("rightsidebar");
+    hide.classList.add("hidden");
+
+
+
+15. in ajax.js functions { Popular(), latest(), showBlog()} add this
+--->
+    var hide = document.getElementById("rightsidebar");
+    hide.classList.remove("hidden");
+
+
+16. in functions.php ----> function dropdownCats(), showCate() ---> replace this class { text-purple-800 }
+-----> add thos class { focus:text-purple-800 }
+
+17. in functions.php --> functions { show_popular_posts(), discover_more_cat(), saved_post() } add class { font-light }.
+
+
+
+
+***********************************************************************20/5/2023***************************************************************************************
+1. in  functions.php ----> function showblogpost() 
+in tag --> <p class="text-gray-500"><?php echo($formattedDate);?></p>
+to--->
+<p class="text-gray-500"><?php echo($formattedDate);?> . 5 min read</p>
+
+
+
+2. in blogs.php id { mydata } replace class { px-4 } to { sm:px-5 }.
+
+
+
+3. in functions.php functions { show_popular_blogposts(), show_cat_blogposts(), show_saved_posts()}  and data.php all desktop view cards 
+add class {pb-3} to this p tag
+
+---><p class="text-purple-800"><?php echo (show_category($catid)); ?></p>
+
+
+
+4. in functions.php functions { show_saved_posts(), } remove class { lg:hidden sm:hidden }.
+
+
+
+5. in functions.php function saved_post() are not working .
+
+
+
+6. in blogs.php in     <!--main content middle bar---> replace class { mx-4 } to { sm:mx-4 }.
+
+7. in functions.php ---> function showblogpost() in all images replace class { lg:h-96 xl:w-3/4 lg:w-3/4 h-96 }
+--->
+to { lg:h-60 xl:w-96 lg:w-96 h-60 }
+
+
+*****************************************************************22/5/2023************************************************************************************
+1. 8. in blogs.php print logged  user id side of logout button 
+
+
+2. 9. in functions.php function dropdown_for_share() replace this function
+to -->
+
+function dropdown_for_share($postid){
+?>
+<input class="focus:outline-none h-0 invisible hidden" type="text" value="https://lannister.deals2buy.in/blogs.php?poid=<?php echo($postid); ?> " id="myInput">
+<div class="dropdown">
+    <button class="focus:outline-none" type="button" data-bs-toggle="dropdown" aria-expanded="">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+        <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+    </svg>
+    </button>
+    <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">post id <?php echo($postid);?></a></li>
+    <li><button class="focus:outline-none ml-3" id="copyTextBtn" onclick="copy_post_link()">Share</button></li>
+    <li><a class="dropdown-item" href="#">Report</a></li>
+    </ul>
+</div>
+<?php
+}
+
+
+3. 10. in register.php add this
+---->
+    
+    <script>
+        function validateForm() {
+          var email = document.forms["myForm"]["email"].value;
+          var password = document.forms["myForm"]["password"].value;
+          var name = document.forms["myForm"]["name"].value;
+
+
+          if(password<8){
+            //alert("Password less tahn 8 Character ")
+          }
+          var nameRegex = /^[a-zA-Z ]+$/; // Regular expression to match only characters and spaces
+
+          var emailRegex = /^[^!#$%^&*()_+\-=[\]{};':"\\|,<>/?]*@[^!#$%^&*()_+\-=[\]{};':"\\|,<>/?]*$/; // Regular expression to match valid email format
+
+        
+          if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+          }
+
+          if (!nameRegex.test(name)) {
+            alert("Please enter a valid name");
+            return false;
+          }
+
+        }
+    </script>
+
+
+4. 11. in register.php replace these
+---->
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST["name"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    try{
+        if(strlen($password)<8){
+            ?>
+                <script>
+                    alert("Password Must be 8 Character");
+                </script>
+            <?php
+        }else{
+            $data = $conn->prepare("INSERT INTO `blog_users` (`name`, `email`, `password`) VALUES (?, ?, ?)");
+            $data->execute(array($name, $email, $password));
+    
+            if(isset($data)){
+                echo('Successfully registered!');
+                header("Location: login.php");
+            }
+        }
+    }
+    catch(Exception $e){
+        echo("Email Already Exists !");
+        //echo($e);
+    }
+}
+    
+
+
+5. 12. in register.php  in  <input type="text" class="form-control" id="" name="email" required>
+
+to add ---> type="email"
+
+6. 13. in login.php  in  <input type="text" class="form-control" id="" name="email" required>
+
+to add ---> type="email"
+
+
+7. 14. in login.php replace this
+
+---->
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    try{
+
+        
+        $query = "SELECT * FROM blog_users WHERE email = '$email'";
+        $stmt = $conn->prepare($query);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+        if (!$results) {
+            echo ("No user Found...");
+        }
+        foreach ($results as $result) {
+            if($result['password'] ==$password){
+                $login = true;
+                $_SESSION['userid'] =  $email;
+                echo('Login Successfully !'. $_SESSION['userid']);
+                header("Location: index.php");
+            }
+            else{
+                echo"Wrong Password";
+            }
+        }
+    }
+    catch(Exception $e){
+        echo("Something went wrong! ");
+        echo($e);
+    }
+}
+
+
+
+8. 15. in data.php inside this if 
+
+--> if($_GET['saved']) 
+replace this { echo("Login or Signup Please..."); } 
+
+to -->
+
+?>
+        <h1 class="my-5">No Saved Post</h1>
+<?php
+
+---------------------------------------------------------------------------------------------------------------
+
+****************************************************23/5/2023**************************************************************************************
+
+1. in blogs.php --> <!---right sidebar--->   remove class { lg:block }.
+
+2. in mobile view dropdown_for_share are not working.
+
+3. in mobile view share button are not share the exact post id.
+
+4. in blogs.php replcae this
+
+-->
+if (!isset($catid)) {
+    //code 
+}
+
+to --->
+
+if (!isset($catid)) {
+
+    if(saved_count($userid)==0){
+    }else{
+    ?>
+    <!--saved posts in right sidebar--->
+    <div class="max-[1100px]:hidden shadow-lg Montserrat font-medium bg-[#ffffff] rounded-lg">
+        <h5 class="pt-6 ml-3"><b>Saved Posts</b></h5>
+        <?php saved_post($userid);?>
+                <a class="text-purple-800 font-bold ml-3 focus:outline-none" href="index.php?saved=1" onclick="catenavigation('Saved'); user_not_found_alert();" >
+                    See All Saved(<?php echo(saved_count($userid)); ?>)
+                </a>
+    </div>
+    <?php
+    }
+}
+
+
+5. in functions.php ---> function saved_count() replace this function 
+
+to--->
+
+function saved_count($userid){
+    global $conn;
+    $query = "SELECT * FROM blog_posts_saved WHERE `user_id`='$userid'";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $results = $stmt->fetchAll();
+    
+    $count = 0;
+    foreach ($results as $result) {// post ids
+        $count = $count + 1;
+    }
+    
+    return($count);
+}
+
+****************************************************************************24/5/2023**********************************************************************
+1. in blogs.php ---> <!--saved posts in right sidebar--->
+
+replace { href="index.php?saved=1" } to { href="blogs.php?saved=1" }
+
+<a class="text-purple-800 font-bold ml-3 focus:outline-none" href="index.php?saved=1" onclick="catenavigation('Saved'); user_not_found_alert();" >
+   See All Saved(<?php echo(saved_count($userid)); ?>)
+</a>
+
+2. in data.php ------> desktop view card replace this 
+
+--->
+<p class="flex flex-row">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+    </svg>
+    <?php echo ($formattedDate); ?>.&nbsp; 5 min read
+</p>
+
+to --->
+
+<div class="flex items-center justify-center ">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+    </svg>
+    <p><?php echo ($formattedDate); ?> &nbsp;</p>
+    <p class="pb-2">.</p>
+    <p> &nbsp; 5 min read</p>
+</div>
+
+3. in data.php ---> mobile view cards 
+---> add these button and php script inside div and div class { flex flex-row }
+
+    <button class="ml-52 focus:outline-none" id="saveicon<?php echo($result['post_id']);?>"
+        onclick="savepost(this.value ,'<?php Check_post_saved_or_not($result['post_id'], $userid); ?>');replaceIcon()"
+        value="<?php echo($result['post_id']); ?>">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            fill=" <?php Check_post_saved_or_not($result['post_id'], $userid); ?> " viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="orange" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+        </svg>
+    </button>
+    <?php dropdown_for_share($result['post_id']); ?>
+
+ to like this ---->
+ <div class="flex flex-row ">
+        <button class="ml-52 focus:outline-none px-2" id="saveicon<?php echo($result['post_id']);?>"
+        status="<?php Check_post_saved_or_not($result['post_id'], $userid); ?>" onclick=" savepost(this.value, "<?php Check_post_saved_or_not($result['post_id'], $userid); ?>"); replaceIcon();"
+        value="<?php echo($result['post_id']); ?>">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            fill=" <?php Check_post_saved_or_not($result['post_id'], $userid); ?> " viewBox="0 0 24 24"
+            stroke-width="1.5" stroke="orange" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+        </svg>
+        </button>
+        <?php dropdown_for_share($result['post_id']); ?>
+</div>
+
+4. in blogs.php --> navigator add class { hidden sm:flex } to last li list 
+
+5. in bloga.php ---> main content middle bar replace class { sm:mx-4 } to { mx-4 } .
+
+6. in blogs.php ----> button { VIEW MORE } add class { mx-4 }.
+
+7. in data.php { bydefaultrelated, showmoreposts } mobile view and desktop view ---> add class { mx-4 }.
+
+*************************************************************25/5/2023*************************************************************************************
+1. in data.php { showmoreposts } remove extra word likes inside of show_likes() function.
+
+2. in functions.php function showblogpost() where div id is { showlike } add class { text-purple-800 }.
+
+3. in functions.php function showblogpost() { article } replace class { px-5 } to { sm:px-5 }.
+
+4. in functions.php function showblogpost() add class { my-4 } to 
+{   
+    <h2 class="text-center text-black text-2xl Montserrat"><b><?php echo ($name); ?></b></h2>
+    <p class="Montserrat my-2"><?php echo ($post_content); ?> </p>
+    <p class="Montserrat my-2"><?php echo ($post_content2); ?></p> 
+    <p class="Montserrat my-2"><?php echo ($post_content3); ?></p>
+}
+
+5. in blogs.php ---> right sidebar this tag 
+
+<h5 class="ml-3"><b>Related Posts</b></h5>
+<?php related_post(); ?>
+
+--> add class { pt-6 } 
+
+6. in functions.php ----> dropdown_for_share() add class { pt-1 } to div.
+
+
+
+7. in blogs.php add id { latest_desk } -->  inside <!--blog nav--> ---> <!--Desktop view--->
+to --> <button onclick="latest(); catenavigation('Latest') " id="latest_desk" class="focus:outline-none mx-2 ">Latest</button>
+
+8. in functions.php function { showcate_mobile_view } add class { latest_mobile } to latest button
+
+
+9. in ajax.js in { //by default blog posts show } add
+-->
+var latest = document.getElementById("latest_desk");
+latest.classList.add("text-purple-800");
+var latestmobile = document.getElementById("latest_mobile");
+latestmobile.classList.add("text-purple-800");
+
+
+10. in ajax.js functions { showBlog(), latest(), Popular(), ShowSaved()}
+
+add this lines--->
+var latest = document.getElementById("latest_desk");
+latest.classList.remove("text-purple-800"); 
+var latest_mobile = document.getElementById("latest_mobile");
+latest_mobile.classList.remove("text-purple-800");
+
+11 . in functions.php  function { related_post } replace these 
+--->
+<div class="mx-3 my-2 bg-gray-100 px-2">
+        <h5 class="text-black">
+            <?php echo($limittitle); ?>
+        </h5>
+        <div class="flex flex-row text-gray-500">
+            <p class=""><?php echo($formattedDate);?>&nbsp;</p>
+            <p class="pb-2">.</p>
+            <p>&nbsp; 5 min read</p>
+        </div>
+</div>
+
+
+
+
+*********************************************************************26/5/2023***************************************************************************************************************************
+
+
+
+1. in functions.php function saved_post raplace this
+--->
+<div class="mx-3  px-2 text-gray-500">
+    <h5 class="text-black">
+        <?php echo(substr($data['post_title'],0,30));?>
+    </h5>
+    <div class="flex flex-row">
+        <p class=""><?php echo($formattedDate);?> &nbsp;</p>
+        <p class="pb-2">.</p>
+        <p>&nbsp; 5 min read</p>
+    </div>
+</div>
+
+
+
+
+2. in blogs.php --->  <!--blog nav-->  <!--Desktop view---> comment out this
+-->
+<div id="dropdown1" class="bg-white z-10 hidden  divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+   <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton1">
+       <?php
+       dropdownCats($ar);
+       ?>
+   </ul>
+</div>
+
+
+
+3. in blogs.php add { onclick="allcatposts()" } to this button 
+-->
+<button id="dropdownDefaultButton1" data-dropdown-toggle="dropdown1" class="inline-flex mx-2 focus:outline-none" type="button">See All</button>
+
+4. in ajax.js add function
+--->
+function allcatposts(){
+  var latest = document.getElementById("latest_desk");
+  latest.classList.remove("text-purple-800");
+
+  var latest_mobile = document.getElementById("latest_mobile");
+  latest_mobile.classList.remove("text-purple-800");
+
+  //show the right sidebar after click on popular button
+  var hide = document.getElementById("rightsidebar");
+  hide.classList.remove("hidden");
+
+  var response = "";
+  $.ajax({
+    type: "GET",
+    url: "data.php?allcatposts=allposts",
+    async: false,
+    success: function (text) {
+      response = text;
+    },
+  });
+  document.getElementById("mydata").innerHTML = response;
+}
+
+
+5. in data.php ---> copy { //show popular posts in mobile and tab views. }
+
+and paste it in data.php and change { if($_GET['popular']) } to { if($_GET['allcatposts']) }
+
+and change { $query = "SELECT * FROM blog_posts ORDER BY likes DESC LIMIT 10"; } to { $query = "SELECT * FROM blog_posts"; }.
+
+
+
+6. in blogs.php --> <!--saved posts in right sidebar---> add class { pb-3 }
+
+
+7. in data.php --> { bydefaultrelated , showmoreposts } in desktop view and mobile view cards   
+
+
+8. in blogs.php after navigator div add class { lg:flex bg-[#f6f6f6] }
+
+
+9. in functions.php functions { show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() }
+
+****************************************************27/5/2023****************************************************************************************
+1. in data.php all mobile view cards --> image replace class{ w-1/3 } to { w-1/2 }
+
+2. in functions.php functions { show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() } mobile view cards dot are not present.
+
+
+3. in blogs.php  <!--blog nav--> <!---mobile view----> comment out this-->
+
+ <div class="flex flex-col bg-white m-auto p-auto text-gray-700 visible sm:visible lg:visible">
+    <div class="flex overflow-x-scroll pb-10 hide-scroll-bar">
+        <div class="flex flex-nowrap  ">
+            <div class=" bg-white ">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </div>
+            <?php //showcate_mobile_view(); ?>
+            <div class="bg-white">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+and paste this -->
+
+<button class=" bg-white prev ml-2">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+    </svg>
+</button>
+<div class="slider flex flex-row overflow-hidden">
+    <?php showcate_mobile_view(); ?>
+</div>
+
+<button class="bg-white next mr-2">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+    </svg>
+</button>
+
+and add class { flex flex-row mt-3 } to parent div
+
+
+4. in functions.php function { showcate_mobile_view() } replace with this
+---->
+**before foreach loop-->
+
+<button onclick="latest();catenavigation('Latest')" id="latest_mobile" class="focus:outline-none mx-4 focus:text-purple-700 active:text-purple-700">Latest</button>
+
+<button onclick="ShowSaved();catenavigation('Saved')" class="focus:outline-none mx-4 focus:text-purple-700 active:text-purple-700">Saved</button>
+
+<button onclick="Popular();catenavigation('Popular')" class="focus:outline-none mx-4 focus:text-purple-700 active:text-purple-700">Popular</button>
+
+**inside foreach loop--->
+
+<button class="focus:outline-none focus:text-purple-700 active:text-purple-700 mx-4" onclick="showBlog(this.value);catenavigation('<?php echo ($catname); ?> ') " value="<?php echo($result['post_cat_id']); ?> " class="col">
+    <?php echo ($catname); ?>
+</button>
+
+
+5. in ajax.js paste this --->
+
+const prev = document.querySelector('.prev')
+const next = document.querySelector('.next')
+const slider = document.querySelector('.slider')
+        
+prev.addEventListener('click', ()=>{
+    slider.scrollLeft -=150
+})
+next.addEventListener('click', ()=>{
+    slider.scrollLeft +=150
+})
+
+
+
+6. in blogs.php remove class {  py-32 } from this div 
+----> <div class="min-[950px]:hidden py-32">
+
+7. in blogs.php replace the class ---> class { font-bold flex justify-center text-4xl Montserrat }  to { font-bold flex ml-4 sm:ml-0 sm:justify-center text-4xl Montserrat } 
+-->
+<h1 class="font-bold flex justify-center text-4xl Montserrat">Related posts</h1>
+
+
+
+8. in blogs.php replece this class ----> class{ font-bold flex justify-center text-4xl Montserrat } to { font-bold flex ml-4 sm:ml-0 sm:justify-center text-4xl Montserrat }
+--->
+<div class="font-bold flex justify-center text-4xl Montserrat"> Related Products </div>
+
+9. in blogs.php --> move { Related Products } before Related Posts.
+------------------------------------------------------------------------------------------------------------------------
+10. in data.php all desktop view cards replace class { text-2xl } to class { text-3xl }
+--> <h5 class="mb-2 text-2xl font-bold Montserrat tracking-tight text-gray-900"></h5>
+
+11. in data.php all desktop view cards add class { text-gray-500 } 
+---->
+<div class="flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+    </svg>
+    <p>Apr 20 &nbsp;</p>
+    <p class="pb-2">·</p>
+    <p> &nbsp; 5 min&nbsp;read</p>
+</div>
+
+
+12. in data.php all desktop view cards replace class { mr-5 } to class { mr-3 }
+--> 
+<button class="mr-5 focus:outline-none" id="saveicon" onclick="savepost(this.value ,'white');replaceIcon();" value="217">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="white" id="svgicon217" viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"></path>
+    </svg>
+</button>
+
+*************************************************29/5/2023***********************************************************************************************************************************************************
+
+1. in functions.php paste these function
+--->
+function user_likes_or_not_btn_color($userid, $postid){
+    global $conn;
+
+    $token = $postid."_".$userid;
+    $query = "SELECT * FROM `blog_posts_user_likes` WHERE `token` = '$token'";// fetch post preveous likes before new user likes.
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $results = $stmt->fetchAll();
+
+    if($results){
+        echo"Black";
+    }
+    else{
+        echo"none";
+    }
+}
+
+2. in functions.php function showblogpost() like button svg add function inside fill attribute
+--> fill="<?php user_likes_or_not_btn_color($userid,$postid); ?>"
+
+3. in functions.php function showblogpost() like button svg add id { likesvg }.
+
+4. in ajax.js inside function newlike() paste this lines
+-->     let like = $('#likesvg');
+        like.attr("fill","black");
+
+
+
+
+5. in ajax.js following functions add infinite scrollling for posts.
+--->//by default blog posts show , 
+--->showBlog(),
+--->latest(),
+--->Popular(),
+--->allcatposts(),
+--->ShowSaved(),
+
+refrence --->
+
+//by default blog posts show
+$(document).ready(function () {
+  var page = 1;
+  var isLoading = false;
+
+  var response = "hello";
+  $.ajax({
+    type: "GET",
+    url: "data.php?defaultcat=1",
+    async: false,
+    success: function (text) {
+      response = text;
+      console.log(response)
+    },
+  });
+  document.getElementById("mydata").innerHTML = response;
+
+  function loadPosts(page){
+
+    var response = "hello";
+    $.ajax({
+      type: "GET",
+      url: "data.php?defaultcat=1",
+      async: false,
+      success: function (text) {
+        response = text;
+        //console.log(response)
+      },
+    });
+    document.getElementById("mydata").innerHTML = response;
+    
+  }
+
+  $(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() >= $(document).height() - 200 && !isLoading) {
+      //alert($(window).scrollTop())
+      page++;
+      loadPosts(page);
+    }
+  });
+  
+  /*
+  var latest = $("#latest_desk");
+  latest.classList.add("text-purple-800");
+
+  
+  var latestmobile = ("#latest_mobile");
+  latestmobile.classList.add("text-purple-800");
+  */
+});
+
+
+
+*******************************************************30/5/2023********************************************************************************
+1. in blog database table { blog_post_category } replace category {demo} to {Sports}.
+
+2. in data.php all mobile view cards savepost button add class { mr-3 sm:mr-0 }
+
+*******************************************************31/5/2023****************************************************************************************
+
+1. in functions.php functions showblogpost() 
+--> in h2 tag replace class { text-2xl } to { text-4xl } .
+
+2 . in blogs.php main <!--main content middle bar--->
+replace class { mx-4 } to { mx-5}
+
+3. in functions.php functions { show_popular_posts(), discover_more_cat(), saved_post(), related_post() } in p tag add class { font-bold }.
+
+4. in register.php email only get .com extension email.
+
+*******************************************************1/6/2023*********************************************************************************************
+1. in blogs.php <!--Navigator--> add class { ml-5 sm:ml-0 }.
+
+2. in data.php all desktop view cards image replase class { object-cover w-full h-full } to { object-cover w-64 h-44 } 
+
+3. in data.php all mobile view cards image replace class { object-cover w-1/2 h-30 md:w-1/3  md:h-52 lg:h-52 lg:w-1/3  } to { object-cover w-28 h-20  }
+
+
+---------------------------------------------------------------------
+1. in blogs.php right side bar <!-----categories in right sidebar--->
+
+
+**************************************************************2/6/2023**************************************************************************************************
+1. in data.php all desktop view cards and functions.php  functions ----> show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() all desktop view cards remove class { mb-3 } from this tag
+-->
+<p class="mb-3 font-normal text-black dark:text-black">
+</p>
+
+
+2. in in functions.php functions { show_popular_posts(), discover_more_cat(), saved_post(), related_post() }
+add class { font-medium } to p tag and class { Montserrat } to h5 tag
+
+
+3. in blogs.php buttons { See more posts , See All Categories , See All Saved } add class { font-medium }
+
+
+4. in functions.php function showCate($limit) replace class { text-2xl } to { text-4xl } .
+
+
+5. in data.php all desktop view cards and functions.php  functions ----> show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() all desktop view cards replace class { flex flex-col w-2/3 mr-4 } to { flex flex-col w-2/3 pr-14 }
+
+
+6. in data.php all desktop view cards and functions ----> show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() all desktop view cards remove class { pb-3 } from these tag 
+-->
+<a href="https://lannister.deals2buy.in/blogs?cat=12" class="pb-3 text-[#9D4EDD] font-bold"> Sports </a>
+
+
+7. in data.php all desktop view cards and functions ----> show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() all desktop view cards replace class { text-3xl } to { text-4xl } from these tag 
+---> h5 tag .
+
+8. in data.php all desktop view cards remove { &nbsp; } from 
+-->
+<div class="flex items-center justify-center text-[#969696] text-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+    </svg>
+    <p>Apr 20 &nbsp;</p>
+    <p>·</p>
+    <p> &nbsp; 5 min&nbsp;read</p>
+</div>
+
+****************************************************************************3/6/2023*****************************************************************************************************
+1. in data.php and functions.php functions { show_popular_blogposts(), show_cat_blogposts(), show_saved_posts() }  all desktop view cards add class { mx-1 } to middle p tag
+-->
+<div class="flex items-center justify-center text-[#969696] text-xl">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-2 w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path>
+    </svg>
+    <p>Apr 11 </p>
+    <p class="">·</p>
+    <p>  5 min&nbsp;read</p>
+</div>
+
+
+2. in functions.php function showCate() replace class { text-4xl } to { text-1.7rem } .
+
+3. in functions.php functions { show_popular_posts(), discover_more_cat(), saved_post(), related_post() } add class { font-medium } 
+
+4. in functions.php function showCate() add class { text-#969696 }
+
+5. in blogs.php navigator desktop view comment out this button
+-->
+<button onclick="allcatposts()" id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="focus:outline-none inline-flex mx-2 focus:outline-none focus:text-[#9D4EDD] text-4xl" type="button">
+    See All Posts
+</button>
+
+6. in blogs.php  buttons { latest , saved, popular } add class { text-#969696 } and replace class { text-4xl } to { text-1.7rem }
+
+7. in blogs.php function showCate() add parameter 5
+
+
+8. in ajax.js notification incress font size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*****************************************************************************************************************************************************************************************************************************************************************************
+                                                     <------forum------>                                             
+*****************************************************************************************************************************************************************************************************************************************************************************

@@ -1,0 +1,244 @@
+<!-----
+	<button status="white" id ="save-button" type="submit" >submit</button>
+
+<script>
+
+
+const saveButton = document.getElementById("save-button");
+
+// Initially set the button text to "Save Post"
+saveButton.textContent = "Save Post";
+const statusValue = saveButton.getAttribute('status'); // retrieves the value of the "status" attribute, which is "orange".
+
+console.log(statusValue)
+
+// Add an event listener to the button
+saveButton.addEventListener("click", function() {
+  if (statusValue === "orange") {
+    // If the button text is "Save Post", change it to "Unsave Post"
+    
+    //saveButton.textContent = "Unsave Post";
+    // Call a function to save the post.
+    savePost();
+  } else {
+    // If the button text is "Unsave Post", change it back to "Sav e Post"
+    
+    //saveButton.textContent = "Save Post";
+    // Call a function to unsave the post
+    unsavePost();
+  }
+});
+
+// Function to save the post
+function savePost() {
+  // Add your code to save the post here
+  console.log("Post saved");
+}
+
+// Function to unsave the post
+function unsavePost() {
+  // Add your code to unsave the post here
+  console.log("Post unsaved");
+}
+
+
+</script>
+
+
+
+
+
+<div class="hover:bg-gray-100 flex flex-row items-center bg-white my-2 px-2 rounded hidden sm:flex Montserrat font-medium" >
+	<div class="">
+		<p class="text-purple-800">demo</p>
+		<a href="index.php?poid=217">
+			<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white Montserrat">The IPL is the most popular cricket league in the </h5>
+			<p class="mb-3 font-normal text-gray-700 dark:text-gray-400">The IPL is the most popular cricket league in the world, and in 2014 it was ranked sixth by average  </p>
+		</a>
+		<div class="flex  justify-between">
+		<p id="date">&nbsp; 5 min read</p>
+
+		<div class="flex flex-row justify-between">
+			
+			<button class="mr-5 saveicon" id="saveicon" status=" orange " onclick=" savepost(this.value ,'orange'); replaceIcon();" value="217">
+				<svg xmlns="http://www.w3.org/2000/svg" fill=" orange " viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" class="w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"></path>
+				</svg>
+			</button>
+				
+			
+			<button class="lg:mr-5 sm:mr-5 focus:outline-none" id="dropdownDefaultButton" data-dropdown-toggle="dropdown217" type="button">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+<path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"></path>
+</svg>
+</button>
+
+			<div id="dropdown217" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+			<ul class="py-2 text-center text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+			<li>
+				<a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Share</a>
+			</li>
+			<li>
+				<a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+			</li>
+			</ul>
+			</div>
+		</div>
+		</div>
+	</div>
+	<img class=" object-cover w-1/3 h-52 md:w-1/3  md:h-52 lg:h-52 lg:w-1/3 " src="images/ipl295461.png" alt="">
+</div>
+<script>
+
+
+function DateDiff(date_deal) {
+	const getTodayDate = () => {
+		const date = new Date();
+
+		let day = date.getDate();
+		let month = date.getMonth() + 1;
+		let year = date.getFullYear();
+		// This arrangement can be altered based on how we want the date's format to appear.
+		let currentDate = `${year}-${month}-${day}`;
+		const today = new Date(currentDate);
+		return today;
+	}
+	const today = getTodayDate(); 
+	// get total seconds between the times
+	var delta = Math.abs(today - date_deal) / 1000;
+	const list_time=[];
+	// calculate (and subtract) whole days
+	var days = Math.floor(delta / 86400);
+	delta -= days * 86400;
+	if(days>0){
+		return String(days)+" Days ago";
+	}
+	// calculate (and subtract) whole hours
+	var hours = Math.floor(delta / 3600) % 24;
+	delta -= hours * 3600;
+	if(hours>0){
+		return String(hours)+" Hours ago"
+	}
+	// calculate (and subtract) whole minutes
+	var minutes = Math.floor(delta / 60) % 60;
+	delta -= minutes * 60;
+	if(minutes>0){
+		return String(minutes)+" Minutes ago"
+	}
+}
+
+//console.log(DateDiff(2023-04-20))
+document.getElementById('date').innerHTML = Date(2023-04-20);
+console.log(Date(2023-04-20))
+
+</script>
+--->
+
+<!---
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+--->
+
+<!----
+
+
+<br>
+<hr>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+
+
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+--->
+
+
+
+
+<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.development.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.3/babel.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://kit.fontawesome.com/eb2155b008.js" crossorigin="anonymous"></script>
+
+
+
+
+<link rel="stylesheet" href="css/Style.css">
+  
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+
+
+
+
+
+<button class="lg:mr-5 sm:mr-5 focus:outline-none" id="dropdownButton" data-dropdown-toggle="dropdown" 
+  type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+      <path
+          d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+  </svg>
+</button>
+
+<div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+  <ul class="py-2 text-center text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton">
+      <li>
+          <a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Share->ganesh</a>
+      </li>
+      <li>
+          <a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+      </li>
+  </ul>
+</div>
+
+
+
+<button class="lg:mr-5 sm:mr-5 focus:outline-none" id="dropdownButton55" data-dropdown-toggle="dropdown55" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+      <path
+          d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+  </svg>
+</button>
+
+<div id="dropdown55" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+  <ul class="py-2 text-center text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownButton55">
+      <li>
+          <a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Share->surya</a>
+      </li>
+      <li>
+          <a href="#" class="block  py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+      </li>
+  </ul>
+</div>
+
+
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+
+<script src="js/ajax.js"></script>

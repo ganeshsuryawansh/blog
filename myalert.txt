@@ -1,0 +1,6 @@
+1. show like directly after click user.
+
+
+2. make new js function to show likes 
+
+3. make show login type session userid for testing 
